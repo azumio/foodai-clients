@@ -66,7 +66,8 @@ def download_test_images():
     with open("test_images.json","r") as f:
         image_links = json.load(f)
 
-    return [ download_image(photo["photos"][0]["href"].replace("=s0","=s544")) for photo in image_links["checkins"] ]
+    pool = Pool(10)
+    return list(pool.map(download_image,[photo["photos"][0]["href"].replace("=s0","=s544") for photo in image_links["checkins"] ]))
 
 
 def sanitize(filename):
