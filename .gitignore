@@ -1,1 +1,3 @@
 .vscode/
+.image_cache
+latency_http*txt
