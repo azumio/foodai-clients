@@ -16,8 +16,9 @@ import io
 import os
 import urllib
 import time
-
-
+from multiprocessing import Pool 
+import json
+from joblib import Memory
 class FoodAI:
     def __init__(self,user_key) -> None:
         self.user_key = user_key
@@ -52,10 +53,20 @@ class FoodAI:
         print(pong.text[:100])
 
 
-
-def download_image(url):
+mem = Memory(".image_cache")
+def download_image_(url):
     image = httpx.get(url)
     return image.content
+
+
+download_image =  mem.cache(download_image_)
+
+
+def download_test_images():
+    with open("test_images.json","r") as f:
+        image_links = json.load(f)
+
+    return [ download_image(photo["photos"][0]["href"].replace("=s0","=s544")) for photo in image_links["checkins"] ]
 
 
 def sanitize(filename):
@@ -64,22 +75,37 @@ def sanitize(filename):
     return filename
 
 
-def test():
-    user_key = os.environ["USER_KEY"]
+user_key = os.environ["USER_KEY"]
+foodai = FoodAI(user_key=user_key)
+
+def recognize_one(image):
     foodai = FoodAI(user_key=user_key)
+    start = time.time()
+    result = foodai.recognize(image,persistent=False)
+    end = time.time()
+    latency = end-start
+
+    return result, latency
+
+def test():
+    
     foodai.connect()
     print(foodai.endpoint)
 
     image = download_image("https://lh3.googleusercontent.com/NdQHDaAcbd4-5kSAh0hs7Yn2nRMY4L_UnWBx1AQfDIY2B3g9qlKl6IZZ_a3xDhYqiADOXYT7OcvtdNKsARd2kyfRxaC7mLJSlA=s544")
     print(f"image size {len(image)}")
 
+  
+    pool = Pool( min(10,int(os.environ.get("NUM_PARALLEL",10)))  )
+
+    print("Downloading test images")
+    test_images = download_test_images()
+    print(f"Cached {len(test_images)} images")
+
+
     for persistent in [False]:
         latency_list = []
-        for i in range(100):
-            start = time.time()
-            result = foodai.recognize(image,persistent=persistent)
-            end = time.time()
-            latency = end-start
+        for i,(result,latency) in enumerate(pool.imap_unordered(recognize_one, test_images)):
             #print(f"latency {latency}")
             latency_list.append([time.time(),latency*1000])
 
