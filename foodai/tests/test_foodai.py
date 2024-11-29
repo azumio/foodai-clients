@@ -2,7 +2,7 @@ import os
 import unittest
 from dotenv import load_dotenv
 from PIL import Image
-from foodai import FoodAI
+from azumio_foodai import FoodAI
 
 load_dotenv()
 
@@ -19,7 +19,7 @@ class TestFoodAI(unittest.TestCase):
         image = Image.open("tests/fruit_salad.jpg")
         response = self.client.analyze(image)
 
-        self.assertGreater(len(response.results[0]), 0, "Number of results should be greater than 0.")
+        self.assertGreater(len(response.results[0].items), 0, "Number of results should be greater than 0.")
     
     def test_analyze_top_n(self):
         # Load image

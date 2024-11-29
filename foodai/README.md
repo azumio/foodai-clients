@@ -24,13 +24,19 @@ Create environment variable
 `export FOODAI_API_KEY=abc`
 
 Direct call: 
-```
-import foodai
+```python
+from azumio_foodai import foodai
+
 foodai.analyze(img)
+
+# or you can add parameters to the call
+foodai.analyze(img, top=3)
 ```
 
 or intialize client with api key: 
 ```python
+from azumio_foodai import FoodAI
+
 client = FoodAI(api_key="abc")
 client.analyze(img)
 ```

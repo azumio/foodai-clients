@@ -4,7 +4,7 @@ from PIL import Image
 import os
 from urllib.parse import urlencode
 import io
-from foodai.food_response import FoodResponse
+from azumio_foodai.food_response import FoodResponse
 
 class FoodAI:
     """
