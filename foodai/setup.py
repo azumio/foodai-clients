@@ -8,7 +8,7 @@ REQUIREMENTS = [i.strip() for i in open("requirements.txt").readlines()]
 
 setuptools.setup(
     name='azumio_foodai',
-    version='1.0.2',
+    version='1.0.4',
     author='Igor Rendulic',
     author_email='igor@azumio.com',
     description='Azumio - Instant Food Recognition',

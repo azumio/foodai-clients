@@ -25,12 +25,11 @@ Create environment variable
 
 Direct call: 
 ```python
-from azumio_foodai import foodai
-
-foodai.analyze(img)
+import azumio_foodai
+azumio_foodai.analyze(img)
 
 # or you can add parameters to the call
-foodai.analyze(img, top=3)
+azumio_foodai.analyze(img, top=3)
 ```
 
 or intialize client with api key: 
