@@ -1,0 +1,1 @@
+from .foodai import FoodAI

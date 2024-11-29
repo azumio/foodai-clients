@@ -1,0 +1,5 @@
+setuptools==75.6.0
+requests==2.32.3
+pillow==11.0.0
+python-dotenv==1.0.1
+dacite==1.8.1

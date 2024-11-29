@@ -1,7 +1,4 @@
-.vscode/
-.image_cache
-latency_http*txt
-*.pyc
+
 venv/
 .idea/
 .vscode/
